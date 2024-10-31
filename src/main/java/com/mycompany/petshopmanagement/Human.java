@@ -8,16 +8,12 @@ package com.mycompany.petshopmanagement;
  *
  * @author Admin
  */
-public class Pet extends Item {
-    String species;
-    String breed;
+public class Human extends TangibleEntity {
     
-    // name, species, breed, price, status
-    Pet(String n, String sp, String b, int p, String s){
-        super(n, p, s);
-        species = sp;
-        breed = b;
+    Human(String s, String n) {
+        super(s, n);
     }
     
-
+    void searchFunction(){}
+    
 }

@@ -11,6 +11,7 @@ package com.mycompany.petshopmanagement;
 public class Product extends Item {
     int stock;
     
+    // name, price, stock, status
     Product(String n, int p, int stk, String s){
         super(n, p, s);
         stock = stk;
