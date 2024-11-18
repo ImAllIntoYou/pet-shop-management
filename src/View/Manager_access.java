@@ -4,6 +4,10 @@
  */
 package View;
 
+import Controller.UserController;
+import Model.Employee;
+
+
 /**
  *
  * @author ADMIN
@@ -478,7 +482,9 @@ public class Manager_access extends javax.swing.JFrame {
             model.addRow(new Object[]{name_em, role_em, status_em});
         }
         
-        //Manager manager = new Manager(name_em, null, status_em);
+        Employee emp = new Employee(name_em, role_em, status_em);
+        UserController.addEmployee(emp);
+        
         
         // Clear the text fields after saving
         name_emp.setText("");

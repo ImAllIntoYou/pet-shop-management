@@ -4,10 +4,16 @@
  */
 package Controller;
 
+import Model.Employee;
+
 /**
  *
  * @author ADMIN
  */
 public class UserController {
-    
+    public static void addEmployee(Employee emp){
+        String query = "insert into employee(name, role, status) values ('"+
+                        emp.getName()+"','"+emp.getRole()+"','"+emp.getStatus()+"')";
+        dbops.updateQuery(query, "");
+    }
 }

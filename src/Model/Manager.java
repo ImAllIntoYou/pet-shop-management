@@ -12,7 +12,7 @@ public class Manager extends User implements SearchFunctionality {
     private String department;
     private String role = "Manager";
 
-    public Manager(String name, String department, String role, String status) {
+    public Manager(String name, String department, String status) {
         super(name, status);
         this.department = department;
     }
