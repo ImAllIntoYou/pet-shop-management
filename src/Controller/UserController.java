@@ -16,4 +16,9 @@ public class UserController {
                         emp.getName()+"','"+emp.getRole()+"','"+emp.getStatus()+"')";
         dbops.updateQuery(query, "");
     }
+    
+    public static void deleteEmployee(Employee emp){
+        String query = "delete from employee where name='" + emp.getName() +"'";
+        dbops.updateQuery(query, "");
+    }
 }

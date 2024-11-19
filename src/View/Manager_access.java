@@ -512,9 +512,9 @@ public class Manager_access extends javax.swing.JFrame {
         name_emp.setText(table_emp.getValueAt(selectedRow, 0).toString());
         role_emp.setText(table_emp.getValueAt(selectedRow, 1).toString());
         status_emp.setText(table_emp.getValueAt(selectedRow, 2).toString());
-    } else {
-        javax.swing.JOptionPane.showMessageDialog(this, "Please select a dog to edit.", "Selection Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-    }
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Please select a dog to edit.", "Selection Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_edit_employeeActionPerformed
 
     private void delete_employeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_employeeActionPerformed
@@ -531,6 +531,9 @@ public class Manager_access extends javax.swing.JFrame {
         int confirm = javax.swing.JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this entry?", "Delete Confirmation", javax.swing.JOptionPane.YES_NO_OPTION);
 
         if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+            String name_em = table_emp.getValueAt(selectedRow, 0).toString();
+            UserController.deleteEmployee(new Employee(name_em, null, null));
+
             // Delete the selected row
             javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) table_emp.getModel();
             model.removeRow(selectedRow);

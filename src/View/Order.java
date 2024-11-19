@@ -1,5 +1,10 @@
 package View;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -14,8 +19,43 @@ public class Order extends javax.swing.JFrame {
     /**
      * Creates new form Order
      */
+    private List<String[]> customerData = new ArrayList<>(List.of(
+    new String[]{"1", "John Doe", "123 Elm Street", "555-1234"},
+    new String[]{"2", "Jane Smith", "456 Oak Avenue", "555-5678"}
+    ));
     public Order() {
         initComponents();
+        initializeProductTable();
+        updateTotalLabel(0.0);
+    }
+private void initializeProductTable() {
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+        model.setRowCount(0); // Clear table
+        Object[][] initialData = {
+            {"101", "Collar", "15.99", "1"},
+            {"102", "Food Bowl", "12.99", "2"}
+        };
+        for (Object[] row : initialData) {
+            model.addRow(row);
+        }
+    }
+
+ private double calculateTotalPrice() {
+        double total = 0.0;
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+        for (int i = 0; i < model.getRowCount(); i++) {
+            try {
+                double price = Double.parseDouble(model.getValueAt(i, 2).toString());
+                int quantity = Integer.parseInt(model.getValueAt(i, 3).toString());
+                total += price * quantity;
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Invalid data in product table!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        return total;
+    }
+  private void updateTotalLabel(double total) {
+        jLabel1.setText("Total: $" + String.format("%.2f", total));
     }
 
     /**
@@ -43,6 +83,8 @@ public class Order extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        add_cus = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -73,6 +115,12 @@ public class Order extends javax.swing.JFrame {
             }
         });
 
+        text_cus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                text_cusActionPerformed(evt);
+            }
+        });
+
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -81,9 +129,26 @@ public class Order extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Product ID", "Product Name", "Price", "Quantity"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jTable2.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                jTable2AncestorAdded(evt);
+            }
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
         jScrollPane2.setViewportView(jTable2);
 
         jLabel7.setFont(new java.awt.Font("Modern No. 20", 1, 24)); // NOI18N
@@ -103,11 +168,33 @@ public class Order extends javax.swing.JFrame {
         jLabel9.setText("Add Product");
 
         jButton2.setText("Add");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Back");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
+            }
+        });
+
+        add_cus.setText("Add");
+        add_cus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                add_cusActionPerformed(evt);
+            }
+        });
+
+        jLabel1.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                jLabel1AncestorAdded(evt);
+            }
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
 
@@ -127,27 +214,31 @@ public class Order extends javax.swing.JFrame {
                         .addGap(37, 37, 37)
                         .addComponent(text_cus, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(search_cus))
+                        .addComponent(search_cus)
+                        .addGap(18, 18, 18)
+                        .addComponent(add_cus))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(30, 30, 30)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton2))))
+                                .addComponent(jButton2))
+                            .addComponent(jLabel8)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton3)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(96, 96, 96))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel4)
-                .addGap(457, 457, 457))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(344, 344, 344))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(405, 405, 405)
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -174,7 +265,8 @@ public class Order extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(search_cus)
-                            .addComponent(text_cus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(text_cus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(add_cus))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -185,7 +277,9 @@ public class Order extends javax.swing.JFrame {
                             .addComponent(jButton2)))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
                 .addContainerGap(63, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -210,6 +304,31 @@ public class Order extends javax.swing.JFrame {
 
     private void search_cusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_cusActionPerformed
         // TODO add your handling code here:
+         String searchInput = text_cus.getText().trim();
+        if (searchInput.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a customer ID or Name.", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        boolean found = false;
+        for (String[] customer : customerData) {
+            if (customer[0].equalsIgnoreCase(searchInput) || customer[1].toLowerCase().contains(searchInput.toLowerCase())) {
+                found = true;
+                updateCustomerTable(customer);
+                break;
+            }
+        }
+
+        if (!found) {
+            JOptionPane.showMessageDialog(this, "Customer not found!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+private void updateCustomerTable(String[] customerDetails) {
+    // Example: Clear existing rows, then add the found customer
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0); // Clear table
+        model.addRow(customerDetails);
     }//GEN-LAST:event_search_cusActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -218,6 +337,70 @@ public class Order extends javax.swing.JFrame {
         employee_access.setVisible(true);
         this.dispose(); // Closes the current JFrame
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void text_cusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_text_cusActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_text_cusActionPerformed
+
+    private void add_cusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_cusActionPerformed
+        // TODO add your handling code here:
+        String id = JOptionPane.showInputDialog(this, "Enter Customer ID:");
+        String name = JOptionPane.showInputDialog(this, "Enter Customer Name:");
+        String address = JOptionPane.showInputDialog(this, "Enter Customer Address:");
+        String phone = JOptionPane.showInputDialog(this, "Enter Customer Phone Number:");
+
+        if (id != null && name != null && address != null && phone != null) {
+            customerData.add(new String[]{id.trim(), name.trim(), address.trim(), phone.trim()});
+            JOptionPane.showMessageDialog(this, "Customer added successfully!");
+        } else {
+            JOptionPane.showMessageDialog(this, "Failed to add customer. Ensure all fields are filled.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }//GEN-LAST:event_add_cusActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        String productId = jTextField2.getText().trim();
+        if (productId.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Enter a valid Product ID.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+        model.addRow(new Object[]{productId, "New Product", "20.00", "1"});
+
+        double total = calculateTotalPrice();
+        updateTotalLabel(total);
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jTable2AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jTable2AncestorAdded
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+    model.setRowCount(0); 
+
+    // Example product data
+    Object[][] productData = {
+        {"101", "Collar", "15.99", "1"},
+        {"102", "Food Bowl", "12.99", "2"}
+    };
+
+    // Add rows to the table
+    for (Object[] row : productData) {
+        model.addRow(row);
+    }
+
+    // Calculate and display the total price
+    double total = calculateTotalPrice();
+    jLabel1.setText("Total: $" + String.format("%.2f", total));
+    
+    }//GEN-LAST:event_jTable2AncestorAdded
+
+    private void jLabel1AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jLabel1AncestorAdded
+        // TODO add your handling code here:
+        jLabel1.setText("$0.00");
+    }//GEN-LAST:event_jLabel1AncestorAdded
 
     /**
      * @param args the command line arguments
@@ -255,8 +438,10 @@ public class Order extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton add_cus;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;

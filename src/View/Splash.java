@@ -1,5 +1,7 @@
 package View;
 
+import javax.swing.SwingUtilities;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -16,8 +18,29 @@ public class Splash extends javax.swing.JFrame {
      */
     public Splash() {
         initComponents();
+        startLoading();
     }
+    
+    private void startLoading() {
+            new Thread(() -> {
+                try {
+                    // Simulate loading with progress bar
+                    for (int i = 0; i <= 100; i++) {
+                        Thread.sleep(30); // Adjust for loading speed
+                        jProgressBar1.setValue(i);
+                    }
 
+                    // Once loading is complete, show MainApp and close Splash
+                    SwingUtilities.invokeLater(() -> {
+                        new ChooseRole().setVisible(true);
+                        this.dispose();
+
+                    });
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -42,7 +65,7 @@ public class Splash extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Modern No. 20", 1, 36)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(102, 0, 51));
-        jLabel2.setText("Loanding......");
+        jLabel2.setText("Loading......");
 
         jLabel3.setFont(new java.awt.Font("Modern No. 20", 1, 36)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(102, 0, 51));
@@ -130,6 +153,8 @@ public class Splash extends javax.swing.JFrame {
             public void run() {
                 new Splash().setVisible(true);
             }
+
+            
         });
     }
 
