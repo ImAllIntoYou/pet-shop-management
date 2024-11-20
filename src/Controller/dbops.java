@@ -26,5 +26,18 @@ public class dbops {
             JOptionPane.showMessageDialog(null,e);
         }
     }
+    public static ResultSet selectQuery(String query){
+        try {
+            Connection conn = connectdbs.getConnection();
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+            return rs;
+        }catch (SQLException e){
+            JOptionPane.showMessageDialog(null, e);
+            return null;
+            
+        }
+    }   
     
 }
+    

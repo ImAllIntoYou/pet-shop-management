@@ -1,8 +1,10 @@
 package View;
 
 import Controller.ItemController;
+import Controller.dbops;
 import Model.Pet;
-
+import java.util.ArrayList;
+import java.sql.*;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -51,6 +53,7 @@ public class DogManagement extends javax.swing.JFrame {
         delete_dog = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         back_button_dog = new javax.swing.JButton();
+        see_all = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -164,6 +167,13 @@ public class DogManagement extends javax.swing.JFrame {
             }
         });
 
+        see_all.setText("See all");
+        see_all.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                see_allActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -171,14 +181,6 @@ public class DogManagement extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(292, 292, 292)
-                        .addComponent(edit_dog)
-                        .addGap(69, 69, 69)
-                        .addComponent(save_dog)
-                        .addGap(68, 68, 68)
-                        .addComponent(delete_dog)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 305, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -194,8 +196,18 @@ public class DogManagement extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(textfield_species, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
+                        .addComponent(textfield_species, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(292, 292, 292)
+                        .addComponent(edit_dog)
+                        .addGap(69, 69, 69)
+                        .addComponent(save_dog)
+                        .addGap(68, 68, 68)
+                        .addComponent(delete_dog)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(see_all)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(textfield_status, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -241,7 +253,8 @@ public class DogManagement extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(edit_dog)
                     .addComponent(save_dog)
-                    .addComponent(delete_dog))
+                    .addComponent(delete_dog)
+                    .addComponent(see_all))
                 .addGap(35, 35, 35)
                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -412,6 +425,41 @@ public class DogManagement extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_delete_dogActionPerformed
 
+    private void see_allActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_see_allActionPerformed
+        // TODO add your handling code here:
+        String[] columnNames = {"ID", "Name", "Breed", "Species", "Status", "Price"};
+        javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(columnNames, 0);
+           
+        ArrayList<Pet> dogList = new ArrayList<>();
+        try {
+
+            // Query to fetch data
+            String query = "SELECT * FROM dogs"; // Replace "pets" with your table name
+            ResultSet rs = dbops.selectQuery(query);
+
+            // Populate the table model with data
+            while (rs.next()) {
+                String id = rs.getString("ID");
+                String name = rs.getString("Name");
+                String breed = rs.getString("Breed");
+                String species = rs.getString("Species");
+                String status = rs.getString("Status");
+                String price = rs.getString("Price");
+
+                model.addRow(new Object[]{id, name, breed, species, status, price});
+            }
+
+            // Close connection
+            rs.close();
+
+        } catch (Exception e) {
+            System.err.println("Error fetching data: " + e.getMessage());
+        }
+
+        // Set the model to the table
+        table_dog.setModel(model);
+    }//GEN-LAST:event_see_allActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -461,6 +509,7 @@ public class DogManagement extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton save_dog;
+    private javax.swing.JButton see_all;
     private javax.swing.JTable table_dog;
     private javax.swing.JTextField textfield_breed;
     private javax.swing.JTextField textfield_id;

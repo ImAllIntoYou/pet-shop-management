@@ -18,6 +18,7 @@ public class ItemController {
                         dog.getPrice()+"','"+dog.getStatus()+"')";
         dbops.updateQuery(query, "");
     }
+    
     public static void addCat(Pet cat){
         String query = "insert into cats(name, species, breed, price, status) values ('"+
                         cat.getName()+"','"+cat.getSpecies()+"','"+cat.getBreed()+"','"+
